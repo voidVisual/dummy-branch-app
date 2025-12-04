@@ -63,7 +63,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 
-## 🔧 Environment Variables
+## Environment Variables
 
 The application is configured via environment variables.
 
@@ -97,6 +97,8 @@ The application is configured via environment variables.
 -   **Grafana**: [http://localhost:3000](http://localhost:3000) (Default: `admin`/`admin`)
 
 ## CI/CD Pipeline
+
+Before Starting the CI/CD add the Docker Username and Password of your Docker Hub in Push stage
 
 The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) handles:
 1.  **Test**: Unit tests and linting.

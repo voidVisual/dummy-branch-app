@@ -5,12 +5,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: microloans
-    ports:
-      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d microloans"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d microloans" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -18,16 +16,31 @@ services:
   api:
     build: .
     environment:
-      FLASK_ENV: development
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/microloans
       PORT: 8000
       PYTHONPATH: /app
     depends_on:
       db:
         condition: service_healthy
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      - api
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "8000:8000"
-    command: gunicorn -w 2 -b 0.0.0.0:8000 wsgi:app
+      - "9091:9090"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
 
 volumes:
   db_data:

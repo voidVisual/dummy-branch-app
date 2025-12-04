@@ -1,0 +1,31 @@
+services:
+  db:
+    deploy:
+      restart_policy:
+        condition: always
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  api:
+    environment:
+      FLASK_ENV: production
+      LOG_LEVEL: INFO
+      LOG_FORMAT: json
+    deploy:
+      restart_policy:
+        condition: always
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    command: gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
+
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      restart_policy:
+        condition: always

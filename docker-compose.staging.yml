@@ -1,0 +1,23 @@
+services:
+  db:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  api:
+    environment:
+      FLASK_ENV: production
+      LOG_LEVEL: INFO
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    command: gunicorn -w 2 -b 0.0.0.0:8000 wsgi:app
+
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"

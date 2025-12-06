@@ -15,7 +15,6 @@ Traffic flows through Nginx (SSL termination) to the Flask API, which connects t
 
 ![Architecture Diagram](architecture_diagram.png)
 
-
 ## Prerequisites
 
 -   **Docker** and **Docker Compose**
